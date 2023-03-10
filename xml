@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="87e06cb8-31fa-4557-81c3-48476c54ecc9" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="cde93fc4-5a8c-401c-9d83-6fa2bf379330" >
+		<salesforce:basic-connection username="esaisree.226@gmail.com" password="karunya.E1" securityToken="sBrdJZMsr7wPPMzWNE2yqrDal" />
+	</salesforce:sfdc-config>
+	<flow name="streaming_channelFlow" doc:id="067f56b3-e22c-4fdb-9c67-51af87d75617" >
+		<http:listener doc:name="Listener" doc:id="c61248d0-5ba5-46be-93bc-e961f1e5be7c" config-ref="HTTP_Listener_config" path="/streaming"/>
+		<salesforce:push-generic-event doc:name="Push generic event" doc:id="30819aee-3995-45f7-9762-bcdc73d6ab0c" config-ref="Salesforce_Config" channelId="0M65i000000L10h"/>
+	</flow>
+	<flow name="streaming_channelFlow2" doc:id="1fd13e9a-ed3d-43c6-85e6-4fea19130b98" >
+		<salesforce:replay-channel-listener doc:name="Replay channel listener" doc:id="ef2ec516-33b0-47a9-b8c9-0c4931cf263f" config-ref="Salesforce_Config" replayOption="ALL" streamingChannel="/u/stream"/>
+		<logger level="INFO" doc:name="Logger" doc:id="6e55db51-0dc4-49d1-937f-7810f0aba1ca" />
+	</flow>
+</mule>
